@@ -1,4 +1,4 @@
-import React , {useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -30,14 +30,14 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignIn() {
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-    };
+    const [validate, setValidate] = useState({
+        email: "",
+        password: ""
+    });
+    const formValidation = (e) => {
+        setValidate({ ...validate, [e.target.name]: e.target.value });
+    }
+
     const navigate = useNavigate()
     useEffect(() => {
         let auth = localStorage.getItem('user');
@@ -47,11 +47,24 @@ export default function SignIn() {
 
     });
 
+
     const login = () => {
-        let auth = localStorage.setItem('user', true);
-        if (!auth) {
-            navigate("/main");
+        if (validate.email === "" || validate.password === "") {
+            alert('Please Fill Out All Fields');
+        } else if (validate.password.length > 8) {
+            alert('Password must be 8 characters');
         }
+        else if (validate.email == "hello@gmail.com" && validate.password == "12345678") {
+            alert('Logged In');
+            let auth = localStorage.setItem('user', true);
+            if (!auth) {
+                navigate("/main");
+            }
+        }
+        else {
+            alert("Enter Valid Email And Password");
+        }
+
     }
 
     return (
@@ -72,54 +85,58 @@ export default function SignIn() {
                     <Typography component="h1" variant="h5">
                         Sign In
                     </Typography>
-                    
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
-                            autoFocus
-                        />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                            onClick={login}
-                        >
-                            Sign In
-                        </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link href="#" variant="body2">
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
-                            </Grid>
+
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        onChange={formValidation}
+                        value={validate.email}
+                        autoFocus
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        onChange={formValidation}
+                        value={validate.password}
+                        autoComplete="current-password"
+                    />
+                    <FormControlLabel
+                        control={<Checkbox value="remember" color="primary" />}
+                        label="Remember me"
+                    />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2 }}
+                        onClick={login}
+                    >
+                        Sign In
+                    </Button>
+                    <Grid container>
+                        <Grid item xs>
+                            <Link href="#" variant="body2">
+                                Forgot password?
+                            </Link>
                         </Grid>
-                    </Box>
-                
+                        <Grid item>
+                            <Link href="#" variant="body2">
+                                {"Don't have an account? Sign Up"}
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </Box>
+
                 <Copyright sx={{ mt: 8, mb: 4 }} />
             </Container>
         </ThemeProvider>
