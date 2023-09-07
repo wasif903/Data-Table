@@ -9,7 +9,8 @@ export const Router = () => {
     return (
         <Routes>
         <Route path="/" element={<SignIn />} />
-        <Route path="/main" element={<Protected Component = {Main} />} />
+        <Route path="/main" element={<Main />} />
+        {/* <Route path="/main" element={<Protected Component = {Main} />} /> */}
         
 
         {/* <Route path="about" element={<About />} /> */}
